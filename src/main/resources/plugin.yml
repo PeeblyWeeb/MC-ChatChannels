@@ -1,0 +1,8 @@
+name: ChatChannels
+version: '${version}'
+
+main: com.salamithecat.chatChannels.ChatChannels
+api-version: '26.1.2'
+load: POSTWORLD
+softdepend:
+  - DiscordSRV
