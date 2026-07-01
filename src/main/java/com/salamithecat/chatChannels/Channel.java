@@ -47,6 +47,7 @@ public class Channel {
     }
 
     public void removeParticipant(Player player, boolean silent, boolean persistent) {
+        Participants.remove(player);
         for (Player participant : Participants) {
             participant.sendRichMessage(
                     "<gray>[#<channelname>]</gray> <playername> left the channel",
@@ -54,7 +55,6 @@ public class Channel {
                     Placeholder.component("playername", player.name())
             );
         }
-        Participants.remove(player);
 
         if (!silent)
             player.sendRichMessage("<gray>You are now in the</gray> #global <gray>channel</gray>");
