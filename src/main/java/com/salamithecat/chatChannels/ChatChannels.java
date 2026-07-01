@@ -75,11 +75,10 @@ public final class ChatChannels extends JavaPlugin {
 
         getServer().getPluginManager().registerEvents(new ChannelEventListener(), this);
 
-        this.getLogger().info("DiscordSRV is available; hooking into GameChatMessagePreProcessEvent");
-
         // enable DiscordSRV integration
         Plugin discordSRV = getServer().getPluginManager().getPlugin("DiscordSRV");
         if (discordSRV != null && discordSRV.isEnabled()) {
+            this.getLogger().info("DiscordSRV is available; hooking into GameChatMessagePreProcessEvent");
             DiscordSRV.api.subscribe(new DiscordSRVListener());
         }
     }
