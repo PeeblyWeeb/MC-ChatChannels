@@ -3,6 +3,7 @@ package com.salamithecat.chatChannels;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.bukkit.entity.Player;
+import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
 import java.util.*;
@@ -34,24 +35,33 @@ public class Channel {
 
     public void addParticipant(Player player) {
         for (Player participant : Participants) {
+            PersistentDataContainer participantContainer = participant.getPersistentDataContainer();
+            boolean participantHiddenValue = Optional.ofNullable(participantContainer.get(Constants.ChannelHiddenKey, PersistentDataType.BOOLEAN)).orElse(false);
+
             participant.sendRichMessage(
                 "<gray>[#<channelname>]</gray> <playername> joined the channel",
-                Placeholder.component("channelname", Component.text(Name)),
+                Placeholder.component("channelname", Component.text(participantHiddenValue ? "" : Name)),
                 Placeholder.component("playername", player.name())
             );
         }
         Participants.add(player);
 
-        player.getPersistentDataContainer().set(Constants.ChannelKey, PersistentDataType.STRING, Name);
-        player.sendRichMessage("<gray>You have joined the</gray> #" + Name + " <gray>channel</gray>");
+        PersistentDataContainer dataContainer = player.getPersistentDataContainer();
+        boolean currentHiddenValue = Optional.ofNullable(dataContainer.get(Constants.ChannelHiddenKey, PersistentDataType.BOOLEAN)).orElse(false);
+
+        dataContainer.set(Constants.ChannelKey, PersistentDataType.STRING, Name);
+        player.sendRichMessage("<gray>You have joined the</gray> #" + (currentHiddenValue ? "[hidden]" : Name) + " <gray>channel</gray>");
     }
 
     public void removeParticipant(Player player, boolean silent, boolean persistent) {
         Participants.remove(player);
         for (Player participant : Participants) {
+            PersistentDataContainer participantContainer = participant.getPersistentDataContainer();
+            boolean participantHiddenValue = Optional.ofNullable(participantContainer.get(Constants.ChannelHiddenKey, PersistentDataType.BOOLEAN)).orElse(false);
+
             participant.sendRichMessage(
                     "<gray>[#<channelname>]</gray> <playername> left the channel",
-                    Placeholder.component("channelname", Component.text(Name)),
+                    Placeholder.component("channelname", Component.text(participantHiddenValue ? "" : Name)),
                     Placeholder.component("playername", player.name())
             );
         }

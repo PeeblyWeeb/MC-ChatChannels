@@ -16,6 +16,8 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
+import java.util.Optional;
+
 public class ChannelEventListener implements Listener {
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
@@ -54,6 +56,8 @@ public class ChannelEventListener implements Listener {
         Player player = event.getPlayer();
         PersistentDataContainer dataContainer = player.getPersistentDataContainer();
 
+        boolean currentHiddenValue = Optional.ofNullable(dataContainer.get(Constants.ChannelHiddenKey, PersistentDataType.BOOLEAN)).orElse(false);
+
         if (dataContainer.has(Constants.ChannelKey)) {
             Channel channel = Channel.get(dataContainer.get(Constants.ChannelKey, PersistentDataType.STRING));
 
@@ -62,9 +66,11 @@ public class ChannelEventListener implements Listener {
 
             ChatRenderer previousRenderer = event.renderer();
             event.renderer(((source, sourceDisplayName, message, viewer) -> {
+
+
                 Component rendered = previousRenderer.render(source, sourceDisplayName, message, viewer);
                 return Component.text("")
-                        .append(Component.text("[#" + channel.Name + "] ", NamedTextColor.GRAY))
+                        .append(Component.text("[#" + (currentHiddenValue ? "" : channel.Name) + "] ", NamedTextColor.GRAY))
                         .append(rendered);
             }));
         }

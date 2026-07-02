@@ -3,6 +3,10 @@ package com.salamithecat.chatChannels;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.tree.LiteralCommandNode;
+import com.salamithecat.chatChannels.Commands.ChannelIncognitoCommand;
+import com.salamithecat.chatChannels.Commands.ChannelJoinCommand;
+import com.salamithecat.chatChannels.Commands.ChannelLeaveCommand;
+import com.salamithecat.chatChannels.Commands.ChannelListParticipantsCommand;
 import com.salamithecat.chatChannels.Listeners.ChannelEventListener;
 import com.salamithecat.chatChannels.Listeners.DiscordSRVListener;
 import github.scarsz.discordsrv.DiscordSRV;
@@ -22,51 +26,10 @@ public final class ChatChannels extends JavaPlugin {
     @Override
     public void onEnable() {
         LiteralCommandNode<CommandSourceStack> channelCommand = Commands.literal("channel")
-                .then(Commands.literal("join")
-                        .then(Commands.argument("name", StringArgumentType.word())
-                            .executes(ctx -> {
-                                String channelName = StringArgumentType.getString(ctx, "name");
-
-                                CommandSender sender = ctx.getSource().getSender();
-                                Entity executor = ctx.getSource().getExecutor();
-
-                                if (!(executor instanceof Player player)) {
-                                    sender.sendPlainMessage("Only players can change their chat channel.");
-                                    return Command.SINGLE_SUCCESS;
-                                }
-
-                                PersistentDataContainer dataContainer = player.getPersistentDataContainer();
-                                if (dataContainer.has(Constants.ChannelKey)) {
-                                    Channel channel = Channel.get(dataContainer.get(Constants.ChannelKey, PersistentDataType.STRING));
-                                    channel.removeParticipant(player, true, true);
-                                }
-
-                                Channel targetChannel = Channel.get(channelName);
-                                targetChannel.addParticipant(player);
-
-                                return Command.SINGLE_SUCCESS;
-                            })))
-                .then(Commands.literal("leave")
-                        .executes(ctx -> {
-
-                            CommandSender sender = ctx.getSource().getSender();
-                            Entity executor = ctx.getSource().getExecutor();
-
-                            if (!(executor instanceof Player player)) {
-                                sender.sendPlainMessage("Only players can change their chat channel.");
-                                return Command.SINGLE_SUCCESS;
-                            }
-
-                            PersistentDataContainer dataContainer = player.getPersistentDataContainer();
-                            if (dataContainer.has(Constants.ChannelKey)) {
-                                Channel channel = Channel.get(dataContainer.get(Constants.ChannelKey, PersistentDataType.STRING));
-                                channel.removeParticipant(player, false, true);
-                            } else {
-                                player.sendRichMessage("<red>You aren't in a channel!</red>");
-                            }
-
-                            return Command.SINGLE_SUCCESS;
-                        }))
+                .then(ChannelJoinCommand.createCommand())
+                .then(ChannelLeaveCommand.createCommand())
+                .then(ChannelListParticipantsCommand.createCommand())
+                .then(ChannelIncognitoCommand.createCommand())
                 .build();
 
         this.getLifecycleManager().registerEventHandler(LifecycleEvents.COMMANDS, commands -> {
