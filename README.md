@@ -6,6 +6,8 @@ you can think of the plugin as a persistent /msg but to multiple people at a tim
 # Features / How to use
 - `/channel join <name>` - joins (or creates if it doesn't exist) a channel with the specified name.
 - `/channel leave` - returns you back to the global channel
+- `/channel list_participants` - list all participants in your current channel
+- `/channel incognito` - toggle hiding the name of your current channel from all chat messages
 
 if you have [DiscordSRV](https://modrinth.com/plugin/discordsrv) installed on your server, this plugin will integrate and hide all messages coming from channels
 
