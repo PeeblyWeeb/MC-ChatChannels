@@ -1,3 +1,6 @@
+import org.gradle.process.ExecOperations
+import java.io.ByteArrayOutputStream
+
 plugins {
     id("java-library")
     id("xyz.jpenilla.run-paper") version "3.0.2"
@@ -17,6 +20,10 @@ dependencies {
 java {
     toolchain.languageVersion = JavaLanguageVersion.of(25)
 }
+
+version = providers.exec {
+    commandLine("git", "rev-parse", "--short", "HEAD")
+}.standardOutput.asText.get().trim()
 
 tasks {
     runServer {
