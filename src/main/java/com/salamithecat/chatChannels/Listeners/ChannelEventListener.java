@@ -56,8 +56,6 @@ public class ChannelEventListener implements Listener {
         Player player = event.getPlayer();
         PersistentDataContainer dataContainer = player.getPersistentDataContainer();
 
-        boolean currentHiddenValue = Optional.ofNullable(dataContainer.get(Constants.ChannelHiddenKey, PersistentDataType.BOOLEAN)).orElse(false);
-
         if (dataContainer.has(Constants.ChannelKey)) {
             Channel channel = Channel.get(dataContainer.get(Constants.ChannelKey, PersistentDataType.STRING));
 
@@ -66,7 +64,8 @@ public class ChannelEventListener implements Listener {
 
             ChatRenderer previousRenderer = event.renderer();
             event.renderer(((source, sourceDisplayName, message, viewer) -> {
-
+                PersistentDataContainer renderDataContainer = player.getPersistentDataContainer();
+                boolean currentHiddenValue = Optional.ofNullable(renderDataContainer.get(Constants.ChannelHiddenKey, PersistentDataType.BOOLEAN)).orElse(false);
 
                 Component rendered = previousRenderer.render(source, sourceDisplayName, message, viewer);
                 return Component.text("")
