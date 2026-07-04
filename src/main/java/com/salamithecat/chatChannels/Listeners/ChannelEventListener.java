@@ -1,6 +1,7 @@
 package com.salamithecat.chatChannels.Listeners;
 
 import com.salamithecat.chatChannels.Channel;
+import com.salamithecat.chatChannels.ChatChannels;
 import com.salamithecat.chatChannels.Constants;
 import io.papermc.paper.chat.ChatRenderer;
 import io.papermc.paper.event.player.AsyncChatEvent;
@@ -56,7 +57,7 @@ public class ChannelEventListener implements Listener {
         Player player = event.getPlayer();
         PersistentDataContainer dataContainer = player.getPersistentDataContainer();
 
-        if (dataContainer.has(Constants.ChannelKey)) {
+        if (dataContainer.has(Constants.ChannelKey) && !ChatChannels.ignoredPlayers.contains(player.getUniqueId())) {
             Channel channel = Channel.get(dataContainer.get(Constants.ChannelKey, PersistentDataType.STRING));
 
             event.viewers().clear();

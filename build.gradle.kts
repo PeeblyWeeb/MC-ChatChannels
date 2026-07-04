@@ -1,6 +1,3 @@
-import org.gradle.process.ExecOperations
-import java.io.ByteArrayOutputStream
-
 plugins {
     id("java-library")
     id("xyz.jpenilla.run-paper") version "3.0.2"
