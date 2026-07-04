@@ -1,3 +1,6 @@
+# download
+click the actions tab at the top, click the top run, scroll down, download jar 👍
+
 # why?
 i did like a very shallow google search for a plugin exactly like this, and didn't find anything that was simple enough for my liking, so i ended up just making my own.
 
