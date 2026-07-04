@@ -46,7 +46,7 @@ public class ChannelListParticipantsCommand {
             );
 
             player.sendRichMessage(
-                    "<gray>There are <participant_count> participants in the channel </gray><channel_name><gray>:</gray>\n\n<participants>",
+                    "<gray>There are <participant_count> participants in the channel </gray>#<channel_name><gray>:</gray>\n\n<participants>",
                     Placeholder.component("participant_count", Component.text(channel.Participants.size())),
                     Placeholder.component("channel_name", Component.text(currentHiddenValue ? "[hidden]" : channel.Name)),
                     Placeholder.component("participants", participants_str)
