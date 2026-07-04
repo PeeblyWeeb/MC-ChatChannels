@@ -7,10 +7,11 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class Channel {
     public static HashMap<String, Channel> Registry = new HashMap<>();
-    public ArrayList<Player> Participants = new ArrayList<>();
+    public Set<Player> Participants = ConcurrentHashMap.newKeySet();
 
     public String Name;
 
